@@ -39,7 +39,7 @@ int get_listener(int port)
 	memset(&sin, 0, sizeof(sin));
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(port);
-	bind(s, &sin, sizeof(sin));
+	bind(s, (struct sockaddr *) &sin, sizeof(sin));
 	listen(s, 128);
 
 	return s;
@@ -55,7 +55,7 @@ void spawn_server()
 	for (;;) {
 		/* Wait for a new connection from a client. */
 		addrlen = sizeof(from);
-		sk = accept(s, &from, &addrlen);
+		sk = accept(s, (struct sockaddr *) &from, &addrlen);
 
 		/* Create a new child process. */
 		if(fork() == 0) {

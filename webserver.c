@@ -11,7 +11,7 @@
 /*================================= DEFINES ==================================*/
 #define LOG_FILE	"log/http_requests.log"
 #define PORT		12345
-
+#define ROOT		"./web"
 
 /*================================ FUNCTIONS =================================*/
 
@@ -47,16 +47,24 @@ void handle(int sk)
 	char request[1024], buf[8192];
 	int i = 0, n, fd;
 	char c;
+	char resourcePath[512];
 
 	/* Read the request (a file name) from the client. */
 	while(read(sk, &c, 1) == 1 && c != '\n' && c != '\r' && i < sizeof(request) - 1) {
 		request[i++] = c;
 	}
 
-	logClientMessage(LOG_FILE, request, i);
-	
 	request[i] = '\0';
-	fd = open(request, 0);
+	
+	logClientMessage(LOG_FILE, request, i);
+
+	memset(resourcePath, 0, sizeof(resourcePath));
+	strcat(resourcePath, ROOT);
+	//strcat(resourcePath, request);
+	strcat(resourcePath, "/index.htm");
+	printf("resourcePath: %s\n", resourcePath);
+
+	fd = open(resourcePath, 0);
 
 	while((n = read(fd, buf, sizeof(buf))) > 0) {
 		printf("%d\n", write(sk, buf, n));

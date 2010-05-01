@@ -1,10 +1,46 @@
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
+
+/*================================= DEFINES ==================================*/
+#define LOG_FILE	"log/http_requests.log"
+#define PORT		12345
+
+
+/*================================ FUNCTIONS =================================*/
+
+/**
+ * Logs a message sent by the client.
+ * Messages receibed by the server are appended in a file.
+ *
+ * @param file The file used to log messages.
+ * @param message The message sent by the client to the server. 
+ * @return The quantity of bytes logged.
+ */
+int logClientMessage(char *file, char *msg, int msgSize)
+{
+	int status = 0;
+	int fd;
+	int flags = O_CREAT | O_RDWR | O_APPEND;
+	int mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
+	char *logHeader = "\n\n---------------------------  LOGGING CLIENT MESSAGE  ---------------------------\n";
+
+	fd = open(file, flags, mode);
+	if (fd > 0) {
+		write(fd, logHeader, strlen(logHeader));
+		status = write(fd, msg, msgSize);
+		close(fd);
+	}
+
+	return status;
+}
+
 
 void handle(int sk)
 {
@@ -17,6 +53,8 @@ void handle(int sk)
 		request[i++] = c;
 	}
 
+	logClientMessage(LOG_FILE, request, i);
+	
 	request[i] = '\0';
 	fd = open(request, 0);
 
@@ -51,9 +89,10 @@ void spawn_server()
 	int s, sk, addrlen, status;
 	struct sockaddr_in from;
 
-	s = get_listener(12345);
+	s = get_listener(PORT);
 
 	for (;;) {
+		printf("Waiting for new connections ...\n");
 		/* Wait for a new connection from a client. */
 		addrlen = sizeof(from);
 		sk = accept(s, (struct sockaddr *) &from, &addrlen);

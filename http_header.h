@@ -14,6 +14,7 @@
 // HTTP Field Names
 #define	HTTP_CONTENT_LENGHT	"Content-Lenght"
 #define HTTP_CONTENT_TYPE	"Content-Type"
+#define HTTP_SERVER		"Server"
 
 
 /*================================ STRUCTURES ================================*/

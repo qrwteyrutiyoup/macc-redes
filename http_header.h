@@ -1,6 +1,7 @@
 #ifndef HTTP_HEADER_H
 #define HTTP_HEADER_H
 
+#include <sys/types.h>
 
 /*================================= DEFINES ==================================*/
 // Characters
@@ -11,9 +12,6 @@
 #define CRLF			"\r\n"
 
 // HTTP Field Names
-#define	HTTP_METHOD		"Method"
-#define HTTP_VERSION		"Version"
-#define HTTP_URI		"URI"
 #define	HTTP_CONTENT_LENGHT	"Content-Lenght"
 #define HTTP_CONTENT_TYPE	"Content-Type"
 
@@ -23,6 +21,7 @@
 /**
  * An HTTP Header is a doubly-linked-list of fields. Each field is a pair 
  * (fName, fValue).
+ *
  */
 typedef struct st_HTTPHeader{
 	char *fName; 	///< Field Name

@@ -116,19 +116,31 @@ void destroyHeader(HTTPHeader *header)
 
 
 /**
- * Serializes a HTTP header for transmitting.
+ * Serializes a HTTP header for transmission.
  * @param hd The header
- * @param buffer The buffer that storage the serialized header
+ * @param [out] buffer The buffer that storage the serialized header
  * @param sizeBuf The size of the buffer
  * @return the number of bytes serialized
  */
-size_t serializeHeader(HTTPHeader *hd, void *buffer, size_t sizeBuf)
+size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 {
 	size_t hdLen; // The lenght of the serialized header
-	
-	
+	size_t offset = 0;
 
+	memset(buffer, 0, sizeBuf);
+	while(hd)
+	{
+		sprintf(buffer+offset, "%s:%s",hd->fName, hd->fValue);
+		strcat(buffer, CRLF); 	// Header terminator
+		offset += strlen(hd->fName);
+		offset += strlen(hd->fValue);
+		offset += 3; // The lenght of the followind chars together: ':', 'CR' and 'LF'.
+		hd = hd->next;
+	}
+	
+	return offset;
 }
+
 
 void printHeader(HTTPHeader *header)
 {

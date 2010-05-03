@@ -1,9 +1,12 @@
 #include <stdio.h>
+#include <string.h>
 #include "../http_header.h"
 
 
 int main()
 {
+	int status;
+	char buffer[512];
 	HTTPHeader *hd = NULL;
 
 	hd = addHeader(hd, "fd1", "vl1");
@@ -33,6 +36,10 @@ int main()
 	printf("Search field[fd6]: %s\n", getHeaderValueByFieldName(hd, "fd6"));
 	printf("Search field[fd1]: %s\n", getHeaderValueByFieldName(hd, "fd1"));
 	printf("Search field[fd7]: %s\n", getHeaderValueByFieldName(hd, "fd7"));
+
+	status = serializeHeader(hd, buffer, sizeof(buffer)); 
+	printf("Serializing Header, bytes: %i. Contents below:\n%s", status, buffer); 
+	printf("strlen(buffer): %i\n", strlen(buffer));
 
 	printf("Destroying\n");
 	destroyHeader(hd);

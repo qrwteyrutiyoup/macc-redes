@@ -12,8 +12,11 @@
 
 
 /**
- * Adds a new field to the HTTP Header
- * @return The header head.
+ * Adds a new Header to the HTTP Headers
+ * @param header The first header of the list.
+ * @param fName The header's field name.
+ * @param fValue The header's field value.
+ * @return The list's first header.
  * 
  * Code example:
  * HTTPHeader *hd;
@@ -21,7 +24,7 @@
  * hd = addField(hd, "content-type", "text-html");
  *
  */ 
-HTTPHeader *addField(HTTPHeader *header, char *fName, char *fValue)
+HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue)
 {
 	HTTPHeader *auxHeader = NULL, *prevHeader = NULL;
 
@@ -47,10 +50,12 @@ HTTPHeader *addField(HTTPHeader *header, char *fName, char *fValue)
 
 
 /**
- * Removes a field from HTTP Header
- * @return The header head.
+ * Removes a header from HTTP Headers
+ * @param header The first header of the list.
+ * @param fName The header's field name.
+ * @return The list's first header.
  */
-HTTPHeader *removeField(HTTPHeader *header, char *fName)
+HTTPHeader *removeHeader(HTTPHeader *header, char *fName)
 {
 	HTTPHeader *auxHeader = NULL;
 
@@ -78,11 +83,11 @@ HTTPHeader *removeField(HTTPHeader *header, char *fName)
 
 
 /**
- * Search the header for a field by field's name.
+ * Searches a header by the headers's field name.
  * @return The field value 
- * @return NULL, if the field doesn't exist
+ * @return NULL, if the field name doesn't exist
  */
-char *getFieldValueByName(HTTPHeader *header, char *name)
+char *getHeaderValueByFieldName(HTTPHeader *header, char *name)
 {
 	while (header && strcmp(header->fName, name) != 0) {
 		header = header->next;
@@ -93,7 +98,7 @@ char *getFieldValueByName(HTTPHeader *header, char *name)
 
 
 /**
- * Removes the header and free the memory..
+ * Removes the headers and free the memory..
  */
 void destroyHeader(HTTPHeader *header)
 {
@@ -109,6 +114,21 @@ void destroyHeader(HTTPHeader *header)
 	}
 }
 
+
+/**
+ * Serializes a HTTP header for transmitting.
+ * @param hd The header
+ * @param buffer The buffer that storage the serialized header
+ * @param sizeBuf The size of the buffer
+ * @return the number of bytes serialized
+ */
+size_t serializeHeader(HTTPHeader *hd, void *buffer, size_t sizeBuf)
+{
+	size_t hdLen; // The lenght of the serialized header
+	
+	
+
+}
 
 void printHeader(HTTPHeader *header)
 {

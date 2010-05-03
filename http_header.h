@@ -32,9 +32,9 @@ typedef struct st_HTTPHeader{
 
 
 /*================================ PROTOTYPES ================================*/
-HTTPHeader *addField(HTTPHeader *header, char *fName, char *fValue);
-HTTPHeader *removeField(HTTPHeader *header, char *fName);
-char *getFieldValueByName(HTTPHeader *header, char *fName);
+HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue);
+HTTPHeader *removeHeader(HTTPHeader *header, char *fName);
+char *getHeaderValueByFieldName(HTTPHeader *header, char *fName);
 void destroyHeader(HTTPHeader *header);
 
 

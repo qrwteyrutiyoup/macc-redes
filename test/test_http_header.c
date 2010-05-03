@@ -6,36 +6,37 @@ int main()
 {
 	HTTPHeader *hd = NULL;
 
-	hd = addField(hd, "fd1", "vl1");
-	hd = addField(hd, "fd2", "vl2");
-	hd = addField(hd, "fd3", "vl3");
-	hd = addField(hd, "fd4", "vl4");
-	hd = addField(hd, "fd5", "vl5");
-	hd = addField(hd, "fd6", "vl6");
-	hd = addField(hd, "fd7", "vl7");
+	hd = addHeader(hd, "fd1", "vl1");
+	hd = addHeader(hd, "fd2", "vl2");
+	hd = addHeader(hd, "fd3", "vl3");
+	hd = addHeader(hd, "fd4", "vl4");
+	hd = addHeader(hd, "fd5", "vl5");
+	hd = addHeader(hd, "fd6", "vl6");
+	hd = addHeader(hd, "fd7", "vl7");
 
 	printHeader(hd);
 
 	printf("Removing fd7\n");
-	hd = removeField(hd, "fd7");
+	hd = removeHeader(hd, "fd7");
 	printHeader(hd);
 	
 	printf("Removing fd1\n");
-	hd = removeField(hd, "fd1");
+	hd = removeHeader(hd, "fd1");
 	printHeader(hd);
 	
 	printf("Removing fd4\n");
-	hd = removeField(hd, "fd4");
+	hd = removeHeader(hd, "fd4");
 	printHeader(hd);
 
-	printf("Search field[fd5]: %s\n", getFieldValueByName(hd, "fd5"));
-	printf("Search field[fd2]: %s\n", getFieldValueByName(hd, "fd2"));
-	printf("Search field[fd6]: %s\n", getFieldValueByName(hd, "fd6"));
-	printf("Search field[fd1]: %s\n", getFieldValueByName(hd, "fd1"));
-	printf("Search field[fd7]: %s\n", getFieldValueByName(hd, "fd7"));
+	printf("Search field[fd5]: %s\n", getHeaderValueByFieldName(hd, "fd5"));
+	printf("Search field[fd2]: %s\n", getHeaderValueByFieldName(hd, "fd2"));
+	printf("Search field[fd6]: %s\n", getHeaderValueByFieldName(hd, "fd6"));
+	printf("Search field[fd1]: %s\n", getHeaderValueByFieldName(hd, "fd1"));
+	printf("Search field[fd7]: %s\n", getHeaderValueByFieldName(hd, "fd7"));
 
 	printf("Destroying\n");
 	destroyHeader(hd);
+	printf("End.\n");
 
 	return 0;
 }

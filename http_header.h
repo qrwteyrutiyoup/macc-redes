@@ -35,7 +35,7 @@ typedef struct st_HTTPHeader{
 HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue);
 HTTPHeader *removeHeader(HTTPHeader *header, char *fName);
 char *getHeaderValueByFieldName(HTTPHeader *header, char *fName);
-size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
+size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf);
 void destroyHeader(HTTPHeader *header);
 
 

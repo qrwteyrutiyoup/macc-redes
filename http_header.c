@@ -128,7 +128,7 @@ size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 	size_t offset = 0;
 
 	memset(buffer, 0, sizeBuf);
-	while(hd)
+	while(hd && offset < sizeBuf)
 	{
 		sprintf(buffer+offset, "%s:%s",hd->fName, hd->fValue);
 		strcat(buffer, CRLF); 	// Header terminator

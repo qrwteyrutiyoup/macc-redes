@@ -128,8 +128,7 @@ size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 	size_t offset = 0;
 
 	memset(buffer, 0, sizeBuf);
-	while(hd && offset < sizeBuf)
-	{
+	while(hd && offset < sizeBuf) {
 		sprintf(buffer+offset, "%s:%s",hd->fName, hd->fValue);
 		strcat(buffer, CRLF); 	// Header terminator
 		offset += strlen(hd->fName);
@@ -144,8 +143,7 @@ size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 
 void printHeader(HTTPHeader *header)
 {
-	while (header)
-	{
+	while (header) {
 		printf("Field: %s \t Value: %s\n", header->fName, header->fValue);
 		header = header->next;
 	}

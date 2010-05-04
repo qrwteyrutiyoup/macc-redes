@@ -16,7 +16,7 @@
 
 #define INDEXES_COUNT	2
 #define INDEXES_MAXLEN	10
-static char indexes[INDEXES_COUNT][INDEXES_MAXLEN] = {"index.html", "index.htm"};
+static char *indexes[INDEXES_COUNT] = {"index.html", "index.htm"};
 
 /*================================ FUNCTIONS =================================*/
 
@@ -104,6 +104,7 @@ void handle(int sk)
 
 	if (!file_exists(resourcePath)) {
 		for (i = 0; i < INDEXES_COUNT; i++) {
+			memset(resourcePath, 0, sizeof(resourcePath));
 			sprintf(resourcePath, "%s%s%s", ROOT, request, indexes[i]);
 			printf("resourcePath: [%s]\n", resourcePath);
 			if (file_exists(resourcePath)) {

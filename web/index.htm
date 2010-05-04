@@ -1,19 +1,84 @@
-<html>
-<body bgcolor="#d0d0d0">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>Web Server Multithread</title>
+	<link type="text/css" href="css/smoothness/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
+	<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="js/jquery-ui-1.8.1.custom.min.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		$("#tabs").tabs();
+	});
+	</script>
+</head>
 
-<h1>
-Mestrado Acedemico em Ciencia da Computacao
-</h1>
-<h2>
-Redes de Computadores 2010.1
-</h2>
+<style>
+A:link {text-decoration: none}
+A:visited {text-decoration: none}
+A:active {text-decoration: none}
+A:hover {text-decoration: none; color: red;}
+.header { background-color: #ccc; height: 150px; text-align: center; font-family: verdana, sans-serif;}
+#logo { float: left;}
+#equipe { font-size: 13px;}
+</style>
 
-<p>
-Web Server Multithread.
-</p>
-<p>
-Capitulo 02. Tarefa 1, pagina 138.
-</p>
+<body>
+
+<div class="header">
+<img src="uece-small.png" id="logo"> 
+<h1>Universidade Estadual do Cear&aacute;</h1>
+<h2>Mestrado Acad&ecirc;mico em Ci&ecirc;ncia da Computa&ccedil;&atilde;o</h2>
+</div>
+
+<div class="demo">
+
+<div id="tabs">
+	<ul>
+		<li><a href="#tabs-1">Home</a></li>
+		<li><a href="#tabs-2">Documentos</a></li>
+		<li><a href="#tabs-3">&Aacute;udio</a></li>
+		<li><a href="#tabs-4">V&iacute;deo</a></li>
+
+	</ul>
+	<div id="tabs-1">
+	<h1> 
+	Mestrado Acad&ecirc;mico em Ci&ecirc;ncia da Computa&ccedil;&atilde;o
+	</h1> 
+	<h2> 
+	Redes de Computadores 2010.1
+	</h2> 
+ 
+	<p> 
+	Web Server Multithread.
+	</p> 
+	<p> 
+	Capitulo 02. Tarefa 1, pagina 138.
+	</p> 
+
+	<p id="equipe">
+	S&eacute;rgio Luis O. B. Correia<br/>
+	Vin&iacute;cius Moura Rom&atilde;o
+	</p>
+
+	</div>
+	<div id="tabs-2">
+	<p><a href="rfc1945.pdf"><img src="pdf_icon.jpg" height="30"> RFC 1945 - Hypertext Transfer Protocol -- HTTP/1.0</a></p>
+	<p><a href="kurose_ex.prog.pdf"><img src="pdf_icon.jpg" height="30"> Especifica&ccedil;&atilde;o dos Trabalhos de Implementa&ccedil;&atilde;o do cap&iacute;tulo 2 (Livro Kurose)</a></p>
+	</div>
+
+	<div id="tabs-3">
+	<p><a href="Angra_-_Carry_On.mp3"><img src="mp3_icon.png" height="30"> Angra - Carry On</a></p>
+	<p><a href="Angra_-_Rebirth.mp3"><img src="mp3_icon.png" height="30"> Angra - Rebirth</a></p>
+	</div>
+
+	<div id="tabs-4">
+	<p><a href="Eric_Clapton_Jeff_Beck-_I_Want_To_Take_You_Higher.flv">Eric Clapton and Jeff Beck - I Want To Take You Higher</a></p>
+	<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/5hpk_v80lHw&hl=en_US&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/5hpk_v80lHw&hl=en_US&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>
+	</div>
+</div>
+
+</div><!-- End demo -->
 
 </body>
 </html>

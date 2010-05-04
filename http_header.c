@@ -157,8 +157,10 @@ size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 
 void printHeader(HTTPHeader *header)
 {
+	printf("** headers\n");
 	while (header) {
-		printf("Field: %s \t Value: %s\n", header->fName, header->fValue);
+		printf("Field: [%s] \t Value: [%s]\n", header->fName, header->fValue);
 		header = header->next;
 	}
+	printf(" headers **\n");
 }

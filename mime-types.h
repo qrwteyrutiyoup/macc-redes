@@ -3,7 +3,7 @@
 
 #include <assert.h>
 
-#define MIMETYPE_COUNT 172
+#define MIMETYPE_COUNT 173
 
 struct mime_type {
 	char extension[10];
@@ -192,6 +192,7 @@ struct mime_type *get_mime_types()
 		mt[169] = (struct mime_type) {.extension = "xyz", .mimetype = "chemical/x-xyz"};
 		mt[170] = (struct mime_type) {.extension = "zip", .mimetype = "application/zip"};
 		mt[171] = (struct mime_type) {.extension = "com", .mimetype = "application/octet-stream"};
+		mt[172] = (struct mime_type) {.extension = "flv", .mimetype = "video/x-flv"};
 	}
 
 	assert(mt);

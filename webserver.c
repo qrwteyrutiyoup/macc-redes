@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include "http_response.h"
 
 /*================================= DEFINES ==================================*/
 #define LOG_FILE	"log/http_requests.log"
@@ -44,10 +45,14 @@ int logClientMessage(char *file, char *msg, int msgSize)
 
 void handle(int sk)
 {
-	char request[1024], buf[8192];
-	int i = 0, n, fd;
+	char request[1024];
+	int i = 0;
 	char c;
+	
 	char resourcePath[512];
+	int nByte;
+	HTTPResponse *resp = NULL;
+	char responseBuf[8192];
 
 	/* Read the request (a file name) from the client. */
 	while(read(sk, &c, 1) == 1 && c != '\n' && c != '\r' && i < sizeof(request) - 1) {
@@ -64,15 +69,19 @@ void handle(int sk)
 	strcat(resourcePath, "/index.htm");
 	printf("resourcePath: %s\n", resourcePath);
 
-	fd = open(resourcePath, 0);
+	// HTTP Response
+	resp = createResponse(resourcePath);
+	nByte = serializeResponse(resp, (char*)responseBuf, sizeof(responseBuf)); //TODO: Treat the case nByte > sizeof(responseBuf)
+	write(sk, responseBuf, nByte);
 
-	while((n = read(fd, buf, sizeof(buf))) > 0) {
-		printf("%d\n", write(sk, buf, n));
+	while((nByte = read(resp->fdEntityBody, responseBuf, sizeof(responseBuf))) > 0) {
+		printf("%d\n", write(sk, responseBuf, nByte));
 	}
 
-	close(fd);
+	destroyResponse(resp);
 	close(sk);
 }
+
 
 int get_listener(int port)
 {
@@ -108,6 +117,7 @@ void spawn_server()
 		/* Create a new child process. */
 		if(fork() == 0) {
 			/* Perform the client's request in the child process. */
+			//handle(sk);
 			handle(sk);
 			exit(0);
 		}

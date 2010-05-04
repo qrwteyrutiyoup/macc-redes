@@ -1,4 +1,4 @@
 all:
-	gcc webserver.c -o webserver
+	gcc *.c -o webserver
 clean:
 	rm -rf webserver

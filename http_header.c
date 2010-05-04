@@ -40,11 +40,11 @@ HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue)
 
 	namelen = strlen(fName);
 	auxHeader->fName = malloc(namelen + 1);
-	memcpy(auxHeader->fName, fName, namelen);
+	strcpy(auxHeader->fName, fName, namelen);
 
 	valuelen = strlen(fValue);
 	auxHeader->fValue = malloc(valuelen + 1);
-	memcpy(auxHeader->fValue, fValue, valuelen);
+	strcpy(auxHeader->fValue, fValue, valuelen);
 
 	auxHeader->next = NULL;
 	auxHeader->prev = prevHeader;

@@ -11,8 +11,12 @@
 
 /*================================= DEFINES ==================================*/
 #define LOG_FILE	"log/http_requests.log"
-#define PORT		12345
+#define PORT		80
 #define ROOT		"./web"
+
+#define INDEXES_COUNT	2
+#define INDEXES_MAXLEN	10
+static char indexes[INDEXES_COUNT][INDEXES_MAXLEN] = {"index.html", "index.htm"};
 
 /*================================ FUNCTIONS =================================*/
 
@@ -42,11 +46,30 @@ int logClientMessage(char *file, char *msg, int msgSize)
 	return status;
 }
 
+/**
+ * Check if the file passed as argument exists *AND* is a 
+ * regular file (i.e. not a directory or device).
+ *
+ * @param filename the file we are gonna check if exists.
+ * @return 1 or 0, depending on whether the file exists or not.
+ */
+int file_exists(const char *filename)
+{
+	int ret = 0;
+	struct stat stat_buf;
+
+	ret = (stat(filename, &stat_buf) == 0 && S_ISREG (stat_buf.st_mode));
+
+	return ret;
+}
+
+
 
 void handle(int sk)
 {
-	char request[1024];
-	int i = 0;
+	char request[1024], delims[] = " ";
+	char *result = NULL;
+	int i = 0, get;
 	char c;
 	
 	char resourcePath[512];
@@ -54,23 +77,59 @@ void handle(int sk)
 	HTTPResponse *resp = NULL;
 	char responseBuf[8192];
 
-	/* Read the request (a file name) from the client. */
+	/* Read the request from the client. */
 	while(read(sk, &c, 1) == 1 && c != '\n' && c != '\r' && i < sizeof(request) - 1) {
 		request[i++] = c;
 	}
 
 	request[i] = '\0';
+
+	result = strtok(request, delims);
+
+	get = 0;	
+	while(result != NULL) {
+		get = (strcmp(result, "GET") == 0) ? 1 : get;
+		if (get && strcmp(result, "GET") != 0) {
+			strcpy(resourcePath, result);
+			strcpy(request, resourcePath);
+			break;	
+		}
+		result = strtok(NULL, delims);
+	}
+
+	printf("request: [%s]\n", request);
+
+	sprintf(resourcePath, "%s%s", ROOT, request);
+	printf("resourcePath: [%s]\n", resourcePath);
+
+	if (!file_exists(resourcePath)) {
+		for (i = 0; i < INDEXES_COUNT; i++) {
+			sprintf(resourcePath, "%s%s%s", ROOT, request, indexes[i]);
+			printf("resourcePath: [%s]\n", resourcePath);
+			if (file_exists(resourcePath)) {
+				break;
+			}
+		}
+	}
+
+	if (!file_exists(resourcePath)) {
+		resp = createResponse("error_pages/not_found.htm");
+	}
+	else {
+		resp = createResponse(resourcePath);
+	}
 	
 	logClientMessage(LOG_FILE, request, i);
 
-	memset(resourcePath, 0, sizeof(resourcePath));
+/*	memset(resourcePath, 0, sizeof(resourcePath));
 	strcat(resourcePath, ROOT);
 	//strcat(resourcePath, request);
 	strcat(resourcePath, "/index.htm");
+*/
 	printf("resourcePath: %s\n", resourcePath);
 
 	// HTTP Response
-	resp = createResponse(resourcePath);
+//	resp = createResponse(resourcePath);
 	nByte = serializeResponse(resp, (char*)responseBuf, sizeof(responseBuf)); //TODO: Treat the case nByte > sizeof(responseBuf)
 	write(sk, responseBuf, nByte);
 
@@ -89,14 +148,24 @@ int get_listener(int port)
 	struct sockaddr_in sin;
 
 	/* Allocate a TCP/IP socket. */
-	s = socket(AF_INET, SOCK_STREAM, 0);
+	if ((s = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
+		perror("socket");
+		exit(1);
+	}
 
 	/* Listen for connections on an arbitrary port */
 	memset(&sin, 0, sizeof(sin));
 	sin.sin_family = AF_INET;
 	sin.sin_port = htons(port);
-	bind(s, (struct sockaddr *) &sin, sizeof(sin));
-	listen(s, 128);
+	if ((bind(s, (struct sockaddr *) &sin, sizeof(sin))) == -1) {
+		perror("bind");
+		exit(2);
+	}
+
+	if (listen(s, 128) == -1) {
+		perror("listen");
+		exit(3);
+	}
 
 	return s;
 }
@@ -114,18 +183,22 @@ void spawn_server()
 		addrlen = sizeof(from);
 		sk = accept(s, (struct sockaddr *) &from, &addrlen);
 
-		/* Create a new child process. */
-		if(fork() == 0) {
-			/* Perform the client's request in the child process. */
-			//handle(sk);
-			handle(sk);
-			exit(0);
+		if (sk == -1) {
+                        perror("accept");
 		}
+		else {
+			/* Create a new child process. */
+			if(fork() == 0) {
+				/* Perform the client's request in the child process. */
+				//handle(sk);
+				handle(sk);
+				close(sk);
+				exit(0);
+			}
 
-		close(sk);
-
-		/* Collect dead children, but don't wait for them. */
-		waitpid(-1, &status, WNOHANG);
+			/* Collect dead children, but don't wait for them. */
+			waitpid(-1, &status, WNOHANG);
+		}
 	}
 }
 

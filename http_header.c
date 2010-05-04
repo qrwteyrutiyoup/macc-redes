@@ -27,6 +27,7 @@
 HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue)
 {
 	HTTPHeader *auxHeader = NULL, *prevHeader = NULL;
+	int namelen, valuelen;
 
 	// Insert at the end of the list
 	auxHeader = header;
@@ -36,10 +37,15 @@ HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue)
 	}
 
 	auxHeader = malloc(sizeof(HTTPHeader));
-	auxHeader->fName = malloc(strlen(fName));
-	strcpy(auxHeader->fName, fName);
-	auxHeader->fValue = malloc(strlen(fValue));
-	strcpy(auxHeader->fValue, fValue);
+
+	namelen = strlen(fName);
+	auxHeader->fName = malloc(namelen + 1);
+	memcpy(auxHeader->fName, fName, namelen);
+
+	valuelen = strlen(fValue);
+	auxHeader->fValue = malloc(valuelen + 1);
+	memcpy(auxHeader->fValue, fValue, valuelen);
+
 	auxHeader->next = NULL;
 	auxHeader->prev = prevHeader;
 	if (prevHeader) prevHeader->next = auxHeader;

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "http_header.h"
 #include "http_response.h"
+#include "mime-types.h"
 
 /*================================= DEFINES ==================================*/
 #define ERROR_FILE_NOT_FOUND	"error_pages/not_found.htm"
@@ -89,6 +90,21 @@ HTTPResponse *createResponse(char *filePath)
 
 char *getContentType(char *filePath)
 {
+	int len = strlen(filePath);
+	char *ext = NULL;;
+	ext = strrchr(filePath,'.');
+
+	if (ext != NULL && (ext - filePath < len)) {
+		int i;
+		struct mime_type *mt = get_mime_types();
+		for (i = 0; i < MIMETYPE_COUNT; i++) {
+			if (strcmp(ext + 1, mt[i].extension) == 0) {
+				printf("mime-type: %s\n", mt[i].mimetype);
+				return mt[i].mimetype;
+			}
+		}
+	}
+
 	return "text/html";
 }
 

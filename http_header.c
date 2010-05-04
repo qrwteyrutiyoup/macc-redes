@@ -133,12 +133,12 @@ size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 		hdLen = 0;
 		hdLen += strlen(hd->fName);
 		hdLen += strlen(hd->fValue);
-		hdLen += 3; // The lenght of the followind chars together: ':', 'CR' and 'LF'.
+		hdLen += 4; // The lenght of the following chars together: ':', ' ', 'CR' and 'LF'.
 		if (offset + hdLen > sizeBuf) {
 			offset += hdLen;
 			break;
 		} else {
-			sprintf(buffer+offset, "%s:%s",hd->fName, hd->fValue);
+			sprintf(buffer+offset, "%s: %s", hd->fName, hd->fValue);
 			strcat(buffer, CRLF); 	// Header terminator
 			offset += hdLen;
 			hd = hd->next;

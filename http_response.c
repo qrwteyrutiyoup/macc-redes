@@ -28,19 +28,19 @@ HTTPResponse *createResponse(char *filePath)
 	assert(newResp != NULL);
 	memset(newResp, 0, sizeof(HTTPResponse));
 
-	newResp->version = (char*) malloc(strlen(HTTP_SERVER_VERSION));
+	newResp->version = (char*) malloc(strlen(HTTP_SERVER_VERSION) + 1);
 	assert(newResp->version != NULL);
 	strcpy(newResp->version, HTTP_SERVER_VERSION);
 
 	newResp->fdEntityBody = open(filePath, O_RDONLY);
 	if (newResp->fdEntityBody < 0) {
 		// Status Code
-		newResp->statusCode = (char*)malloc(strlen(ST_CODE_NOT_FOUND));
+		newResp->statusCode = (char*)malloc(strlen(ST_CODE_NOT_FOUND) + 1);
 		assert(newResp->statusCode != NULL);
 		strcpy(newResp->statusCode, ST_CODE_NOT_FOUND);
 
 		// Reason Phrase
-		newResp->reasonPhrase = (char*)malloc(strlen(ST_PHRASE_NOT_FOUND));
+		newResp->reasonPhrase = (char*)malloc(strlen(ST_PHRASE_NOT_FOUND) + 1);
 		assert(newResp->reasonPhrase != NULL);
 		strcpy(newResp->reasonPhrase, ST_PHRASE_NOT_FOUND);
 
@@ -55,12 +55,12 @@ HTTPResponse *createResponse(char *filePath)
 		newResp->header = addHeader(newResp->header, HTTP_CONTENT_TYPE, getContentType(ERROR_FILE_NOT_FOUND));
 	} else {
 		// Status Code
-		newResp->statusCode = (char*)malloc(strlen(ST_CODE_OK));
+		newResp->statusCode = (char*)malloc(strlen(ST_CODE_OK) + 1);
 		assert(newResp->statusCode != NULL);
 		strcpy(newResp->statusCode, ST_CODE_OK);
 
 		// Reason Phrase
-		newResp->reasonPhrase = (char*)malloc(strlen(ST_PHRASE_OK));
+		newResp->reasonPhrase = (char*)malloc(strlen(ST_PHRASE_OK) + 1);
 		assert(newResp->reasonPhrase != NULL);
 		strcpy(newResp->reasonPhrase, ST_PHRASE_OK);
 

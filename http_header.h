@@ -12,7 +12,7 @@
 #define CRLF			"\r\n"
 
 // HTTP Field Names
-#define	HTTP_CONTENT_LENGHT	"Content-Lenght"
+#define	HTTP_CONTENT_LENGTH	"Content-Length"
 #define HTTP_CONTENT_TYPE	"Content-Type"
 #define HTTP_SERVER		"Server"
 
@@ -38,6 +38,7 @@ HTTPHeader *removeHeader(HTTPHeader *header, char *fName);
 char *getHeaderValueByFieldName(HTTPHeader *header, char *fName);
 size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf);
 void destroyHeader(HTTPHeader *header);
+void printHeader(HTTPHeader *header);
 
 
 #endif /*  HTTP_HEADER_H  */

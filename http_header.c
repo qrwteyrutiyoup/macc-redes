@@ -27,6 +27,7 @@
 HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue)
 {
 	HTTPHeader *auxHeader = NULL, *prevHeader = NULL;
+	int namelen, valuelen;
 
 	// Insert at the end of the list
 	auxHeader = header;
@@ -36,10 +37,15 @@ HTTPHeader *addHeader(HTTPHeader *header, char *fName, char *fValue)
 	}
 
 	auxHeader = malloc(sizeof(HTTPHeader));
-	auxHeader->fName = malloc(strlen(fName));
-	strcpy(auxHeader->fName, fName);
-	auxHeader->fValue = malloc(strlen(fValue));
-	strcpy(auxHeader->fValue, fValue);
+
+	namelen = strlen(fName);
+	auxHeader->fName = malloc(namelen + 1);
+	memcpy(auxHeader->fName, fName, namelen);
+
+	valuelen = strlen(fValue);
+	auxHeader->fValue = malloc(valuelen + 1);
+	memcpy(auxHeader->fValue, fValue, valuelen);
+
 	auxHeader->next = NULL;
 	auxHeader->prev = prevHeader;
 	if (prevHeader) prevHeader->next = auxHeader;
@@ -133,12 +139,12 @@ size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 		hdLen = 0;
 		hdLen += strlen(hd->fName);
 		hdLen += strlen(hd->fValue);
-		hdLen += 3; // The lenght of the followind chars together: ':', 'CR' and 'LF'.
+		hdLen += 4; // The lenght of the following chars together: ':', ' ', 'CR' and 'LF'.
 		if (offset + hdLen > sizeBuf) {
 			offset += hdLen;
 			break;
 		} else {
-			sprintf(buffer+offset, "%s:%s",hd->fName, hd->fValue);
+			sprintf(buffer+offset, "%s: %s", hd->fName, hd->fValue);
 			strcat(buffer, CRLF); 	// Header terminator
 			offset += hdLen;
 			hd = hd->next;
@@ -151,8 +157,10 @@ size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 
 void printHeader(HTTPHeader *header)
 {
+	printf("** headers\n");
 	while (header) {
-		printf("Field: %s \t Value: %s\n", header->fName, header->fValue);
+		printf("Field: [%s] \t Value: [%s]\n", header->fName, header->fValue);
 		header = header->next;
 	}
+	printf(" headers **\n");
 }

@@ -80,7 +80,7 @@ HTTPResponse *createResponse(char *filePath)
 	if (S_ISREG(fStat.st_mode)) {
 		char strbuf[32];
 		sprintf(strbuf, "%i", (int)fStat.st_size);
-		newResp->header = addHeader(newResp->header, HTTP_CONTENT_LENGHT, strbuf);
+		newResp->header = addHeader(newResp->header, HTTP_CONTENT_LENGTH, strbuf);
 	}
 	
 	return newResp;

@@ -120,21 +120,29 @@ void destroyHeader(HTTPHeader *header)
  * @param hd The header
  * @param [out] buffer The buffer that storage the serialized header
  * @param sizeBuf The size of the buffer
- * @return the number of bytes serialized
+ * @return the number of bytes serialized. If it returns a greater than sizeBuf, it means that a 
+ * bigger buffer is needed.
  */
 size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf)
 {
-	size_t hdLen; // The lenght of the serialized header
+	size_t hdLen = 0; // The lenght of the serialized header
 	size_t offset = 0;
 
 	memset(buffer, 0, sizeBuf);
 	while(hd && offset < sizeBuf) {
-		sprintf(buffer+offset, "%s:%s",hd->fName, hd->fValue);
-		strcat(buffer, CRLF); 	// Header terminator
-		offset += strlen(hd->fName);
-		offset += strlen(hd->fValue);
-		offset += 3; // The lenght of the followind chars together: ':', 'CR' and 'LF'.
-		hd = hd->next;
+		hdLen = 0;
+		hdLen += strlen(hd->fName);
+		hdLen += strlen(hd->fValue);
+		hdLen += 3; // The lenght of the followind chars together: ':', 'CR' and 'LF'.
+		if (offset + hdLen > sizeBuf) {
+			offset += hdLen;
+			break;
+		} else {
+			sprintf(buffer+offset, "%s:%s",hd->fName, hd->fValue);
+			strcat(buffer, CRLF); 	// Header terminator
+			offset += hdLen;
+			hd = hd->next;
+		}
 	}
 	
 	return offset;

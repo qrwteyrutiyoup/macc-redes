@@ -38,6 +38,7 @@ HTTPHeader *removeHeader(HTTPHeader *header, char *fName);
 char *getHeaderValueByFieldName(HTTPHeader *header, char *fName);
 size_t serializeHeader(HTTPHeader *hd, char *buffer, size_t sizeBuf);
 void destroyHeader(HTTPHeader *header);
+void printHeader(HTTPHeader *header);
 
 
 #endif /*  HTTP_HEADER_H  */
